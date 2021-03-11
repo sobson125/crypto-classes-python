@@ -38,7 +38,7 @@ class HashFunctions:
             letters = string.ascii_lowercase
             text = ''.join(random.choices(letters + string.digits, k=i))
             obj['length'].append(len(text))
-            obj['time'].append(timeit.timeit('lambda: hashlib.new(\'sha256\', text.encode("UTF-8"))'))
+            obj['time'].append(timeit.timeit(lambda: hashlib.new('sha256', text.encode("UTF-8"))))
         chart = px.line(obj, x='length', y='time')
         chart.show()
 
