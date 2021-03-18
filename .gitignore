@@ -36,7 +36,8 @@
 # .idea/modules
 # *.iml
 # *.ipr
-
+*.db
+__pycache__
 # CMake
 cmake-build-*/
 
