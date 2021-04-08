@@ -5,7 +5,7 @@ logger = logging.getLogger("hashing")
 logging.basicConfig(level=logging.DEBUG)
 
 
-class Symetric():
+class Symmetric():
 
     def __init__(self) -> None:
         self.key = None
@@ -17,7 +17,7 @@ class Symetric():
 
     def set_key(self, key: str) -> None:
         self.key = bytearray.fromhex(key)
-        print(self.key)
+        logger.info(self.key)
 
     def encode_message(self, message: str) -> bytes:
         logger.info('debugining inside encode')
