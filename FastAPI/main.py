@@ -109,7 +109,8 @@ def verify_message(message: SignedMessage):
     :return:
     """
     verified = asymmetric.verify_message(message.message, message.signature)
-    return {"Verified": verified}
+    output = "Your message was verified successfully " if verified else "Something went wrong"
+    return {"Verified": output}
 
 
 @app.post("/asymmetric/encode", status_code=201)
