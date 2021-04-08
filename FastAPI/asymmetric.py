@@ -10,6 +10,10 @@ class Asymmetric():
         self.public_key = None
 
     def generate_keys(self) -> None:
+        """
+        Generates public and private key
+        :return:
+        """
         self.private_key = rsa.generate_private_key(
             public_exponent=65537,
             key_size=2048,
@@ -17,6 +21,10 @@ class Asymmetric():
         self.public_key = self.private_key.public_key()
 
     def get_keys(self) -> dict:
+        """
+        Getter for both fields of private and public keys in class instance
+        :return:
+        """
         pem_private = self.private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.TraditionalOpenSSL,
@@ -32,6 +40,10 @@ class Asymmetric():
         }
 
     def get_keys_ssh(self) -> dict:
+        """
+        Getter for both fields of private and public keys in class instance in using ssh
+        :return:
+        """
         pem_private_ssh = self.private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.OpenSSH,
@@ -47,6 +59,12 @@ class Asymmetric():
         }
 
     def set_keys(self, private_key, public_key) -> None:
+        """
+        Setter for public and private key
+        :param private_key:
+        :param public_key:
+        :return:
+        """
         self.private_key = serialization.load_pem_private_key(
             bytearray.fromhex(private_key),
             password=None
@@ -54,6 +72,11 @@ class Asymmetric():
         self.public_key = serialization.load_pem_public_key(bytearray.fromhex(public_key))
 
     def sign_message(self, message: str) -> bytes:
+        """
+        Signs message so it can not be forged
+        :param message:
+        :return:
+        """
         return base64.b64encode(self.private_key.sign(
             bytes(message, "utf-8"),
             padding.PSS(
@@ -64,6 +87,12 @@ class Asymmetric():
         )
 
     def verify_message(self, message: str, signature: str) -> bool:
+        """
+        Verifies whether messsage recieved is not changed by people with malicious intent
+        :param message:
+        :param signature:
+        :return:
+        """
         decoded_sign = base64.b64decode(signature)
         try:
             self.public_key.verify(
@@ -80,6 +109,11 @@ class Asymmetric():
             return False
 
     def encode_message(self, message: str) -> bytes:
+        """
+        Encodes message
+        :param message:
+        :return:
+        """
         return base64.b64encode(self.public_key.encrypt(
             bytes(message, "utf-8"),
             padding.OAEP(
@@ -90,6 +124,11 @@ class Asymmetric():
         )
 
     def decode_message(self, message: str) -> str:
+        """
+        Decodes message
+        :param message:
+        :return:
+        """
         decoded = base64.b64decode(message)
         return self.private_key.decrypt(
             decoded,
